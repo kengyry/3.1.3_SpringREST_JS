@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="472340d2-78f0-472c-baeb-dc5edb8cf11e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../../.idea/webContexts.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/admin.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/.htaccess" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../.idea/dataSources/4f0491fa-b3de-4257-b443-638052786491.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../.idea/dataSources/4f0491fa-b3de-4257-b443-638052786491.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/web/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/web/MainApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/web/Model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/web/Model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/web/Repositories/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/web/Repositories/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/web/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/web/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/web/config/handler/LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/web/config/handler/LoginSuccessHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/web/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/web/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../java/web/service/RoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/web/service/RoleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/user-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/user-update.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin/user-update1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/user-list_.html" beforeDir="false" afterPath="$PROJECT_DIR$/user.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="ProjectId" id="1jwz7Uz6lJNBb3H90F5bIl3IDwW" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="472340d2-78f0-472c-baeb-dc5edb8cf11e" name="Default Changelist" comment="" />
+      <created>1604729775164</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1604729775164</updated>
+      <workItem from="1604729776299" duration="1926000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="794" y="448" key="NewPhpFileDialog" timestamp="1604730073663">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="794" y="448" key="NewPhpFileDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1604730073663" />
+    <state x="461" y="169" key="SettingsEditor" timestamp="1604729879981">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="461" y="169" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1604729879981" />
+  </component>
+</project>

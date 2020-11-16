@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"   crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"  crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <style>
+
+        .modal-body input {
+            width: 100%;
+        }
+        .modal-body .row div  {
+            padding: 5px 5px;
+        }
+        .modal-body .row div:nth-child(1) {
+            text-align: right;
+        }
+        form input {
+            width: 100%;
+        }
+        form .row div  {
+            padding: 5px 5px;
+        }
+        form .row div:nth-child(1) {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<!-- =========================================НАВБАР -->
+<nav class="navbar navbar-dark  bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+        <span>Пользователь "</span><span th:text="${currentUser.lastName}"></span><span>" с ролью (ролями) </span>
+        <span th:each="i : ${currentUser.getRoles()}" th:text="${#strings.substringAfter(i.getAuthority(), '_') + ' '}"></span></a>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" th:href="@{/logout}">Sign out</a>
+        </li>
+    </ul>
+</nav>
+
+<br/>
+<br/>
+
+
+<!-- =========================================СЛЕВА -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link" href="/admin" role="tab" aria-selected="true">Admin</a>
+                <a class="nav-link" href="/user" th:if="${not #lists.isEmpty(allRoles)}">User</a>
+            </div>
+        </div>
+
+        <!-- ========================================= NEW TABLIST -->
+        <script>
+            "use strict";
+
+
+
+            function createUsersTable() {
+                // СПИСОК ПОЛЬЗОВАТЕЛЕЙ И ПОСТРОЕНИЕ ТАБЛИЦЫ
+                var request = $.ajax({
+                    url: "/users/",
+                    method: "GET",
+                    dataType: "html"
+                });
+
+                request.done(function( msg) {
+
+                    var arr = JSON.parse(msg);
+                    var tbodyContent = '';
+                    $.each(arr, function(index, value){
+
+                        var roleHtml =  [];
+                        value.roles.forEach(function(item, i, arrItem) {
+                            roleHtml.push(value.roles[i].role.replace('ROLE_',''));
+                        });
+
+                        tbodyContent = tbodyContent +
+                            '<tr data-id="'+value.id+'">'+
+                            '<td class="text-center" >'+value.id+'</td>'+
+                            '<td class="text-center" >'+value.firstName+'</td>'+
+                            '<td class="text-center" >'+value.lastName+'</td>'+
+                            '<td class="text-center" >'+value.email+'</td>'+
+                            '<td class="text-center" >'+value.password+'</td>'+
+                            '<td class="text-center" style="text-transform: capitalize">'+roleHtml.join(' / ')+'</td>'+
+                            '<td class="text-center" ><button data-id="' +value.id + '" data-action="edit" type="button" data-user="/users/' +value.id + '/" class="btn btn-primary btn-sm">Изменить</button></td>'+
+                            '<td class="text-center" ><button data-id="' +value.id + '" data-action="delete" type="button" data-user="/users/' +value.id + '/" class="btn btn-danger btn-sm">Удалить</button></td>'+
+                            '</tr>';
+
+                    });
+
+                    $("#tableList tbody").html(tbodyContent);
+
+                });
+
+                request.fail(function( jqXHR, textStatus ) {
+                    alert( "Request failed: " + textStatus );
+                });
+            }
+
+            $( document ).ready(function() {
+
+                createUsersTable();
+
+
+
+
+
+                // КЛИК НА ЛЮБОЙ КНОПКЕ В ТАБЛИЦЕ
+
+                $( "#tableList tbody" ).on( "click", "button", function() {
+
+                    var action = $(this).data('action');
+
+                    var user = $(this).data('user');
+
+                    var request = $.ajax({
+                        url: user,
+                        method: "GET",
+                        dataType: "html"
+                    });
+
+                    request.done(function( msg) {
+
+                        var arr = JSON.parse(msg);
+                        console.log(arr);
+
+                        var roleHtml =  [];
+                        arr.roles.forEach(function(item, i, arrItem) {
+                            roleHtml.push(arr.roles[i].role.replace('ROLE_',''));
+                        });
+
+                        var id = arr.id;
+                        var firstName = arr.firstName;
+                        var lastName = arr.lastName;
+                        var email = arr.email;
+                        var password = arr.password;
+                        var role = roleHtml.join(' / ');
+
+                        var idModal = "#" + action + "Modal";
+
+                        $(idModal+" input[name='id']").val(id);
+                        $(idModal+" input[name='firstName']").val(firstName);
+                        $(idModal+" input[name='lastName']").val(lastName);
+                        $(idModal+" input[name='email']").val(email);
+                        $(idModal+" input[name='password']").val(password);
+                        $(idModal+" input[name='role']").val(role);
+
+                        $(idModal+" button").attr('data-id',id);
+
+
+                        $(idModal).modal('show');
+                    });
+
+                    request.fail(function( jqXHR, textStatus ) {
+                        alert( "Request failed: " + textStatus );
+                    });
+
+
+                });
+
+
+                // НАЖАТА КнОПка удалить в модальном окне
+                $( ".modal" ).on( "click", "button[data-action='delete']", function() {
+
+                    var userID = $(this).data('id');
+                    var action = $(this).data('action');
+                    var idModal = "#" + action + "Modal";
+                    var url = "/" + action + "/" +userID+'/';
+
+                    var request = $.ajax({
+                        url: url,
+                        method: "GET",
+                        dataType: "text"
+                    });
+
+                    request.done(function( msg ) {
+                        console.log(msg);
+                        if(msg=='200') {
+
+                            $(idModal).modal('hide');
+                            $("#tableList tr[data-id="+userID+"]").empty();
+                        }
+                    });
+
+                    request.fail(function( jqXHR, textStatus ) {
+                        alert( "Request failed: " + textStatus );
+                    });
+                });
+
+
+                $( "#btnEdit" ).on( "click",  function() {
+
+                    var userID = $(this).data('id');
+                    var action = $(this).data('action');
+                    var idModal = "#" + action + "Modal";
+                    var url = "/" + action + "/" +userID+'/';
+
+                    var idModal = "#" + action + "Modal";
+
+
+                    var firstName = $(idModal+" input[name='firstName']").val();
+                    var lastName = $(idModal+" input[name='lastName']").val();
+                    var email = $(idModal+" input[name='email']").val();
+                    var password = $(idModal+" input[name='password']").val();
+                    var role= $(idModal+" #edit_roles").val();
+
+
+
+                    var request = $.ajax({
+                        url: url,
+                        method: "POST",
+                        data : JSON.stringify({ firstName : firstName, lastName : lastName, email : email, password : password, roles : role}),
+                        dataType: "json",
+                        contentType : "application/json"
+                    });
+
+                    request.done(function( msg ) {
+                        console.log(msg);
+
+                        if(msg == 200) {
+                            createUsersTable();
+                            $(idModal).modal('hide');
+                        }
+
+                    });
+
+                    request.fail(function( jqXHR, textStatus ) {
+                        alert( "Request failed: " + textStatus );
+                    });
+                });
+
+
+
+                $( "#btnCreateUser" ).on( "click",  function() {
+
+
+                    var firstName = $("#createUser input[name='firstName']").val();
+                    var lastName = $("#createUser input[name='lastName']").val();
+                    var email = $("#createUser input[name='email']").val();
+                    var password = $("#createUser input[name='password']").val();
+                    var role= $("#create_roles").val();
+
+
+
+                    var request = $.ajax({
+                        url: '/create/',
+                        method: "POST",
+                        data : JSON.stringify({ firstName : firstName, lastName : lastName, email : email, password : password, roles : role }),
+                        dataType: "json",
+                        contentType : "application/json"
+                    });
+
+                    request.done(function( msg ) {
+                        //console.log(msg);
+
+                        if(msg == 200) {
+
+                            createUsersTable();
+
+                            $("#createUser input[name='firstName']").val('');
+                            $("#createUser input[name='lastName']").val('');
+                            $("#createUser input[name='email']").val('');
+                            $("#createUser input[name='password']").val('');
+                            $("#create_roles").val('');
+
+                            $("#usersTable").click();
+                        }
+
+                    });
+
+                    request.fail(function( jqXHR, textStatus ) {
+                        alert( "Request failed: " + textStatus );
+                    });
+                });
+
+
+            });
+
+        </script>
+
+        <div class="modal fade" id="deleteModal">
+            <div class="modal-dialog   modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Удаление пользователя</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+
+                            <form action="#" method="post">
+                                <div class="row">
+                                    <div class="col-sm-4">ID:</div>
+                                    <div class="col-sm-8"><input disabled type="number" value="" name="id" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Имя:</div>
+                                    <div class="col-sm-8"><input disabled type="text"  value=""  name="firstName" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Фамилия:</div>
+                                    <div class="col-sm-8"><input disabled type="text"  value=""  name="lastName" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Email:</div>
+                                    <div class="col-sm-8"><input disabled type="text"  value=""  name="email" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Пароль:</div>
+                                    <div class="col-sm-8"><input disabled type="text"  value=""   name="password" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Роли:</div>
+                                    <div class="col-sm-8"><input disabled type="text"  value=""  name="role" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <button type="button" data-action="delete" class="btn btn-danger">Удалить</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Нажатие на кнопку "Редактировать" -->
+
+
+
+        <div class="modal fade" id="editModal">
+            <div class="modal-dialog   modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Редактирование пользователя</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+
+                            <form action="#" method="post" id="editForm">
+                                <div class="row">
+                                    <div class="col-sm-4">ID:</div>
+                                    <div class="col-sm-8"><input disabled type="number" value="" name="id" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Имя:</div>
+                                    <div class="col-sm-8"><input  type="text"  value=""  name="firstName" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Фамилия:</div>
+                                    <div class="col-sm-8"><input  type="text"  value=""  name="lastName" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Email:</div>
+                                    <div class="col-sm-8"><input  type="text"  value=""  name="email" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Пароль:</div>
+                                    <div class="col-sm-8"><input  type="text"  value=""   name="password" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">Роли:</div>
+                                    <div class="col-sm-8">
+                                        <select multiple size="2" name="roles" id="edit_roles">
+                                            <option th:each="role : ${allRoles}" th:value="${role.id}" th:text="${role}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <button type="button" data-action="edit" id="btnEdit" class="btn btn-primary">Сохранить</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-10">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a class="nav-link active" href="#usersTable" role="tab" data-toggle="tab">Список пользователей</a></li>
+                <li>
+                    <a class="nav-link" href="#newUser" role="tab" data-toggle="tab">Новый пользователь</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane show active" id="usersTable">
+                    <table class="table table-striped table-bordered table-condensed" id="tableList">
+                        <thead>
+                        <tr>
+                            <th class="text-center" >ID</th>
+                            <th class="text-center" >Имя</th>
+                            <th class="text-center" >Фамилия</th>
+                            <th class="text-center" >Эл. почта</th>
+                            <th class="text-center" >Пароль</th>
+                            <th class="text-center" >Роли</th>
+                            <th class="text-center" >Изменить</th>
+                            <th class="text-center" >Удалить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Создание пользователя *******************************************************************-->
+
+                <div role="tabpanel" class="tab-pane" id="newUser">
+
+                        <form name="createUser" id="createUser" enctype="multipart/form-data" action="" method="post">
+                            <div class="container">
+                            <div class="row">
+                                <div class="col-sm-3 text-right">Имя</div>
+                                <div class="col-sm-9"><input type="text" required value="" name="firstName"  /></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 text-right">Фамилия</div>
+                                <div class="col-sm-9"><input type="text" required value="" name="lastName"   /></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 text-right">Email</div>
+                                <div class="col-sm-9"><input type="text" required value="" name="email"  /></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 text-right">Пароль</div>
+                                <div class="col-sm-9"><input type="text" required value="" name="password" /></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 text-right">Роли</div>
+                                <div class="col-sm-9">
+                                    <select multiple size="2" name="roles" id="create_roles">
+                                        <option th:each="role : ${allRoles}" th:value="${role.id}" th:text="${role}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <button type="button" class="btn btn-primary" name="createUser" id="btnCreateUser">Создать</button>
+                                </div>
+                            </div>
+
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
